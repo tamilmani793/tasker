@@ -287,9 +287,10 @@ function demoMode(){
 }
 
 async function signInGoogle(){
+  const redirectTo = window.location.origin + window.location.pathname;
   const{error}=await SB.auth.signInWithOAuth({
     provider:'google',
-    options:{redirectTo:window.location.href}
+    options:{redirectTo}
   });
   if(error) toast('Login failed: '+error.message,'err');
 }
