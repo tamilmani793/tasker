@@ -1,3 +1,7 @@
 supabase-config.js
 start-local.ps1
 index.local.html
+node_modules/
+package.json
+package-lock.json
+generate-icons.js
