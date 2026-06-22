@@ -224,10 +224,13 @@
 <div class="toast" id="toast"></div>
 <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)"/>
 
+<script src="supabase-config.js" onerror="void 0"></script>
 <script>
-  /* ── Injected by GitHub Actions from repository variables/secrets ── */
-  const SUPABASE_URL = "__SUPABASE_URL__";
-  const SUPABASE_ANON_KEY = "__SUPABASE_ANON_KEY__";
+  /* ── Injected by GitHub Actions (production) or supabase-config.js (local dev) ── */
+  const SUPABASE_URL = (window.SUPABASE_URL_LOCAL && window.SUPABASE_URL_LOCAL !== 'https://YOUR-PROJECT-REF.supabase.co')
+    ? window.SUPABASE_URL_LOCAL : "__SUPABASE_URL__";
+  const SUPABASE_ANON_KEY = (window.SUPABASE_ANON_KEY_LOCAL && window.SUPABASE_ANON_KEY_LOCAL !== 'YOUR-ANON-KEY-HERE')
+    ? window.SUPABASE_ANON_KEY_LOCAL : "__SUPABASE_ANON_KEY__";
 </script>
 <script>
 const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
