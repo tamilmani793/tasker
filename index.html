@@ -252,15 +252,29 @@ async function init(){
     demoMode(); return;
   }
   try{
-    SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    SB = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { detectSessionInUrl: true, persistSession: true }
+    });
     show('loading-screen');
+
+    /* Register auth listener FIRST so it catches the OAuth redirect token */
+    SB.auth.onAuthStateChange(async(event, session)=>{
+      if(session && !currentUser){
+        /* Clean the token hash from the URL after login */
+        if(window.location.hash.includes('access_token')){
+          history.replaceState(null, '', window.location.pathname);
+        }
+        await loadUser(session.user);
+      } else if(!session && currentUser){
+        currentUser=null; tasks=[]; show('auth-screen');
+      }
+    });
+
+    /* Then check for an existing session */
     const {data:{session}} = await SB.auth.getSession();
     if(session){ await loadUser(session.user); }
-    else{ show('auth-screen'); }
-    SB.auth.onAuthStateChange(async(_,session)=>{
-      if(session && !currentUser){ await loadUser(session.user); }
-      else if(!session && currentUser){ currentUser=null; tasks=[]; show('auth-screen'); }
-    });
+    else if(!window.location.hash.includes('access_token')){ show('auth-screen'); }
+
   }catch(e){ console.error(e); demoMode(); }
 }
 
