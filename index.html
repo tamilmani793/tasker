@@ -246,7 +246,7 @@ let dashFilter='all', wChart=null, mChart=null;
 const selDays=new Set([new Date().getDay()]);
 
 async function init(){
-  const isConfigured = SUPABASE_URL !== '__SUPABASE_URL__' && SUPABASE_ANON_KEY !== '__SUPABASE_ANON_KEY__';
+  const isConfigured = SUPABASE_URL.startsWith('https://') && SUPABASE_ANON_KEY.startsWith('eyJ');
   if(!isConfigured){
     console.warn('Supabase not configured — running in demo mode');
     demoMode(); return;
